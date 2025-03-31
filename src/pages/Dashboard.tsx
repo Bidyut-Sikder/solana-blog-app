@@ -4,9 +4,11 @@ import { Button } from "../components/Button";
 import { useWallet } from "@solana/wallet-adapter-react";
 
 import { useBlogContext } from "../context/BlogContext";
+import { PostForm } from "../components/PostForm";
 
 const Dashboard = () => {
-  const { user } = useBlogContext();
+  const [showModal ,setShowModal]=useState(false)
+  const { user,initialized,initUser } = useBlogContext();
   const { connected, connect, select, wallets, signMessage, publicKey } =
     useWallet();
 
@@ -16,29 +18,26 @@ const Dashboard = () => {
   const [postTitle, setPostTitle] = useState(" ");
   const [postContent, setPostContent] = useState("");
 
-
   // const connected = true;
   const posts: any = [];
   const createPost = (postTitle: string, postContent: any) => {
     console.log(postTitle, postContent);
   };
-  const initialized = false; // Add this line to define the 'initialized' variable
+  // const initialized = false; // Add this line to define the 'initialized' variable
 
-  const showModal = false;
-  const setShowModal = (data: boolean) => {
-    console.log(data);
-  };
+
 
   const onConnect = () => {
     setConnecting(true);
-    select("Phantom" );
+    select("Phantom");
+    setConnecting(false);
   };
 
-  useEffect(() => {
-    if (user) {
-      setConnecting(false);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) {
+  //     setConnecting(false);
+  //   }
+  // }, [user,publicKey]);
 
   return (
     <div className="dashboard background-color overflow-auto h-screen">
@@ -57,28 +56,33 @@ const Dashboard = () => {
               <p className=" font-bold text-sm ml-2 capitalize mr-4 underlinepink">
                 Blog
               </p>
-              <img
-                src={user?.avatar}
-                alt="avatar"
-                className="w-7 rounded-full bg-gray-200 shadow ring-2 ring-indigo-400 ring-offset-2 ring-opacity-50"
-              />
 
-              <p className=" font-bold text-sm ml-2 capitalize">{user?.name}</p>
               {initialized ? (
-                <Button
-                  className="ml-3 mr-2"
-                  onClick={() => {
-                    setShowModal(true);
-                  }}
-                >
-                  Create Post
-                </Button>
+                <>
+                  <img
+                    src={user?.avatar}
+                    alt="avatar"
+                    className="w-7 rounded-full bg-gray-200 shadow ring-2 ring-indigo-400 ring-offset-2 ring-opacity-50"
+                  />
+
+                  <p className=" font-bold text-sm ml-2 capitalize">
+                    {user?.name}
+                  </p>
+                  <Button
+                    className="ml-3 mr-2"
+                    onClick={() => {
+                      setShowModal(true);
+                    }}
+                  >
+                    Create Post
+                  </Button>
+                </>
               ) : (
                 <Button
                   className="ml-3 mr-2"
-                  // onClick={() => {
-                  //   initUser();
-                  // }}
+                  onClick={() => {
+                    initUser();
+                  }}
                 >
                   Initialize User
                 </Button>
@@ -179,17 +183,18 @@ const Dashboard = () => {
         </div>
         <div className={`modal ${showModal && "show-modal"}`}>
           <div className="modal-content">
-            <span className="close-button" onClick={() => setShowModal(false)}>
+            <span className="close-button text-3xl" onClick={() => setShowModal(false)}>
               ×
             </span>
             form
-            {/* <PostForm
+            <PostForm
+            formHeader='Create Post'
               postTitle={postTitle}
               postContent={postContent}
               setPostTitle={setPostTitle}
               setPostContent={setPostContent}
               onSubmit={() => createPost(postTitle, postContent)}
-            /> */}
+            /> 
           </div>
         </div>
       </main>

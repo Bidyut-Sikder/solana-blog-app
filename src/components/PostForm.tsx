@@ -1,10 +1,10 @@
-import {  useState } from "react";
-
+import { useState } from "react";
 
 import Button from "./Button";
+import { useBlogContext } from "../context/BlogContext";
 
-export const PostForm = (props:any) => {
-  const { user } = useBlog();
+export const PostForm = (props: any) => {
+  const { user } = useBlogContext();
   const {
     onSubmit,
     postTitle,
