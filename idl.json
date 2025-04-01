@@ -30,6 +30,19 @@
         { "name": "title", "type": "string" },
         { "name": "content", "type": "string" }
       ]
+    },
+    {
+      "name": "deletePost",
+      "accounts": [
+        { "name": "postAccount", "isMut": true, "isSigner": false },
+        { "name": "userAccount", "isMut": true, "isSigner": false },
+        { "name": "authority", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "postId", "type": "u8" },
+        { "name": "bump", "type": "u8" }
+      ]
     }
   ],
   "accounts": [
@@ -60,7 +73,15 @@
       }
     }
   ],
-  "metadata":{
-    "address":"JC8GpV1hXD1Rh6ynZdNSErXBDZvp6LgmB1DneUXWThBA"
+  "errors": [
+    {
+      "code": 6000,
+      "name": "Unauthorized",
+      "msg": "You are not authorized to delete this post."
+    },
+    { "code": 6001, "name": "InvalidPostId", "msg": "Invalid post ID." }
+  ],
+  "metadata": {
+    "address": "JC8GpV1hXD1Rh6ynZdNSErXBDZvp6LgmB1DneUXWThBA"
   }
 }

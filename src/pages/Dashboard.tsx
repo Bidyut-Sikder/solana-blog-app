@@ -7,10 +7,10 @@ import { useBlogContext } from "../context/BlogContext";
 import { PostForm } from "../components/PostForm";
 
 const Dashboard = () => {
-  const [showModal ,setShowModal]=useState(false)
-  const { user,initialized,initUser } = useBlogContext();
-  const { connected, connect, select, wallets, signMessage, publicKey } =
-    useWallet();
+  const [showModal, setShowModal] = useState(false);
+  const { user, initialized, initUser, createPost, posts } =
+    useBlogContext();
+  const { connected, select } = useWallet();
 
   const navigate = useNavigate();
   const [connecting, setConnecting] = useState(false);
@@ -19,14 +19,9 @@ const Dashboard = () => {
   const [postContent, setPostContent] = useState("");
 
   // const connected = true;
-  const posts: any = [];
-  const createPost = (postTitle: string, postContent: any) => {
-    console.log(postTitle, postContent);
-  };
+
   // const initialized = false; // Add this line to define the 'initialized' variable
-
-
-
+  console.log(posts);
   const onConnect = () => {
     setConnecting(true);
     select("Phantom");
@@ -120,12 +115,7 @@ const Dashboard = () => {
           {/* <h1 className="title">The Blog</h1> */}
           <div className="row">
             <article className="best-post">
-              <div
-                className="best-post-image"
-                style={{
-                  backgroundImage: `url("https://user-images.githubusercontent.com/62637513/184338364-a14b7272-d1dc-49f3-9f43-3ac37dacbe85.png")`,
-                }}
-              ></div>
+              <div></div>
               <div className="best-post-content">
                 <div className="best-post-content-cat">
                   December 2, 2021<span className="dot"> </span>Blog
@@ -148,25 +138,21 @@ const Dashboard = () => {
 
             <div className="all__posts">
               {posts.map((item: any) => {
+                // console.log(item);
                 return (
-                  <article
-                    className="post__card-2"
-                    onClick={() => {
-                      navigate(`/read-post/${item.publicKey.toString()}`);
-                    }}
-                    key={item.account.id}
-                  >
-                    <div className="post__card_-2">
-                      <div
-                        className="post__card__image-2"
-                        style={{
-                          backgroundImage: `url("https://user-images.githubusercontent.com/62637513/184338539-9cdbdc58-1e72-4c48-8203-0b7ec23d3eb0.png")`,
-                        }}
-                      ></div>
+                  <article className="post__card-2r" key={item.account.id}>
+               
+
+                    <div
+                      className="post__card_-2"
+                      onClick={() => {
+                        navigate(`/read-post/${item.publicKey.toString()}`);
+                      }}
+                    >
                       <div>
                         <div className="post__card_meta-2">
                           <div className="post__card_cat">
-                            December 2, 2021<span className="dot"> </span>
+                            <span className="dot"> </span>
                             {item.account.title}{" "}
                           </div>
                           <p className="post__card_alttitle-2">
@@ -183,18 +169,24 @@ const Dashboard = () => {
         </div>
         <div className={`modal ${showModal && "show-modal"}`}>
           <div className="modal-content">
-            <span className="close-button text-3xl" onClick={() => setShowModal(false)}>
+            <span
+              className="close-button text-3xl"
+              onClick={() => setShowModal(false)}
+            >
               ×
             </span>
             form
             <PostForm
-            formHeader='Create Post'
+              formHeader="Create Post"
               postTitle={postTitle}
               postContent={postContent}
               setPostTitle={setPostTitle}
               setPostContent={setPostContent}
-              onSubmit={() => createPost(postTitle, postContent)}
-            /> 
+              onSubmit={() => {
+                createPost(postTitle, postContent);
+                setShowModal(false);
+              }}
+            />
           </div>
         </div>
       </main>
@@ -203,3 +195,5 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+
